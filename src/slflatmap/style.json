@@ -1,17 +1,18 @@
 {
   "version": 8,
-  "id": "osm-liberty",
-  "name": "OSM Liberty",
+  "id": "slflatmap",
+  "name": "Second Life flat map",
   "metadata": {
     "mapbox:type": "template"
   },
   "sources": {
     
     "natural_earth_shaded_relief": {
-      "maxzoom": 6,
+      "maxzoom": 8,
+      "minzoom": 1,
       "tileSize": 256,
       "tiles": [
-        "http://map.secondlife.com/map-{z}-{x}-{y}-objects.jpg"
+        "http://map.secondlife.com/map-{z}-1024-1024-objects.jpg"
       ],
       "type": "raster"
     }
@@ -30,7 +31,7 @@
       "id": "natural_earth",
       "type": "raster",
       "source": "natural_earth_shaded_relief",
-      "maxzoom": 6,
+      "maxzoom": 8,
       "layout": {
         "visibility": "visible"
       },

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset=utf-8 />
-  <title>OSM Liberty</title>
+  <title>Second Life maptest with Mapbox</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <style>
     body { margin:0; padding:0; }
@@ -17,9 +17,20 @@
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
-      center: [1.0,1.0],
+      center: [10.0,10.0],
       zoom: 8,
-      hash: true
-  });
+      interactive: true,
+      
+      transformRequest: (url, resourceType)=> {
+        if(resourceType === 'Tile' && url.startsWith('http://map.secondlife.com')) {
+            return {
+                url: url.replace('http', 'https://cors-anywhere.herokuapp.com/http')////,
+                ////headers: { 'Origin': 'null'},
+                ////credentials: 'include'  // Include cookies for cross-origin requests
+                    }
+                }
+            }     
+        }
+    );
   </script>
 </body>
