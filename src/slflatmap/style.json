@@ -8,11 +8,11 @@
   "sources": {
     
     "natural_earth_shaded_relief": {
-      "maxzoom": 8,
-      "minzoom": 1,
+      "maxzoom": 7,
+      "minzoom": 7,
       "tileSize": 256,
       "tiles": [
-        "http://map.secondlife.com/map-{z}-1024-1024-objects.jpg"
+        "https://secondlife-maps-cdn.akamaized.net/map-ADD(8,-{z})-{x}-{y}-objects.jpg"
       ],
       "type": "raster"
     }

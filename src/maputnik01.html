@@ -14,17 +14,26 @@
 <body>
   <div id='map'></div>
   <script>
+      function addfix(s)
+      {
+        //  Convert ADD(n,m) in string to sum of n and m.
+        //  Match expression always removes ADD if it matches, so loop is safe.
+        while (match = /ADD\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
+        { s = s.replace(match[0], parseInt(match[1]) + parseInt(match[2]));}
+        return s
+      }
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
-      center: [10.0,10.0],
-      zoom: 8,
+      center: [-170.0, -75.0],
+      zoom: 4,
       interactive: true,
       
       transformRequest: (url, resourceType)=> {
-        if(resourceType === 'Tile' && url.startsWith('http://map.secondlife.com')) {
+        if(resourceType === 'Tile' && url.startsWith('https://secondlife-maps-cdn.akamaized.net')) {
+            url = addfix(url); // apply ADD rewriting
             return {
-                url: url.replace('http', 'https://cors-anywhere.herokuapp.com/http')////,
+                url: url.replace('https', 'https://cors-anywhere.herokuapp.com/https')////,
                 ////headers: { 'Origin': 'null'},
                 ////credentials: 'include'  // Include cookies for cross-origin requests
                     }
