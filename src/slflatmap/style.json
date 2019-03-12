@@ -9,10 +9,10 @@
     
     "natural_earth_shaded_relief": {
       "maxzoom": 7,
-      "minzoom": 7,
+      "minzoom": 0,
       "tileSize": 256,
       "tiles": [
-        "https://secondlife-maps-cdn.akamaized.net/map-ADD(8,-{z})-{x}-{y}-objects.jpg"
+        "https://secondlife-maps-cdn.akamaized.net/map-ADD(8,-{z})-MULT({x},POW2(ADD(8,-{z})))-MULT({y},POW2(ADD(8,-{z})))-objects.jpg"
       ],
       "type": "raster"
     }

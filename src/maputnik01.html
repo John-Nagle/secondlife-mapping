@@ -14,24 +14,41 @@
 <body>
   <div id='map'></div>
   <script>
-      function addfix(s)
-      {
+      function urlmath(s)
+      { //  Our own little domain-specific language for rewriting tile numbers in URLs.
         //  Convert ADD(n,m) in string to sum of n and m.
-        //  Match expression always removes ADD if it matches, so loop is safe.
-        while (match = /ADD\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
-        { s = s.replace(match[0], parseInt(match[1]) + parseInt(match[2]));}
-        return s
+        //  Convert POW2(n) to 2^n
+        //  Convert MULT(n,m) to n*m
+        //  Match expression always removes operation if it matches, so loop is safe.
+        var changed = false;
+        var match;
+        do
+        {   changed = false;       
+            if (match = /ADD\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
+            {   s = s.replace(match[0], parseInt(match[1]) + parseInt(match[2]));
+                changed = true;
+            }
+            if (match = /MULT\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
+            {   s = s.replace(match[0], parseInt(match[1]) * parseInt(match[2]));
+                changed = true;
+            }
+            if (match = /POW2\(([0-9\-]+)\)/.exec(s))
+            {   s = s.replace(match[0], Math.pow(2,parseInt(match[1])));
+                changed = true;       
+            }
+        } while (changed);
+        return s;
       }
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
       center: [-170.0, -75.0],
-      zoom: 4,
+      zoom: 7,
       interactive: true,
       
       transformRequest: (url, resourceType)=> {
         if(resourceType === 'Tile' && url.startsWith('https://secondlife-maps-cdn.akamaized.net')) {
-            url = addfix(url); // apply ADD rewriting
+            url = urlmath(url); // apply ADD rewriting
             return {
                 url: url.replace('https', 'https://cors-anywhere.herokuapp.com/https')////,
                 ////headers: { 'Origin': 'null'},
