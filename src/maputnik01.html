@@ -19,6 +19,7 @@
         //  Convert ADD(n,m) in string to sum of n and m.
         //  Convert POW2(n) to 2^n
         //  Convert MULT(n,m) to n*m
+        //  Convert SLTILENUM(x,y,z) to SL map tile numbers
         //  Match expression always removes operation if it matches, so loop is safe.
         var changed = false;
         var match;
@@ -36,7 +37,20 @@
             {   s = s.replace(match[0], Math.pow(2,parseInt(match[1])));
                 changed = true;       
             }
+            if (match = /SLTILENUM\(([0-9]+),([0-9]+),([0-9]+)\)/.exec(s))
+            {   var x = parseInt(match[1]);
+                var y = parseInt(match[2]);
+                var z = parseInt(match[3]);
+                z = 8 - z;                      // adjust to SL system where 1 is lowest rez
+                var scale = Math.pow(2,z-1);    // scale factor
+                x = x * scale;                  // SL uses the region pos as the tile number
+                y = y * scale;
+                var tileid = z.toString() + '-' + x.toString() + '-' + y.toString();
+                s = s.replace(match[0], tileid);
+                changed = true;
+            }
         } while (changed);
+        console.log("Tile: " + s);                // ***TEMP***
         return s;
       }
   var map = new mapboxgl.Map({

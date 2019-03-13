@@ -12,7 +12,7 @@
       "minzoom": 0,
       "tileSize": 256,
       "tiles": [
-        "https://secondlife-maps-cdn.akamaized.net/map-ADD(8,-{z})-MULT({x},POW2(ADD(8,-{z})))-MULT({y},POW2(ADD(8,-{z})))-objects.jpg"
+        "https://secondlife-maps-cdn.akamaized.net/map-SLTILENUM({x},{y},{z})-objects.jpg"
       ],
       "type": "raster"
     }
