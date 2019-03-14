@@ -88,15 +88,15 @@
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
-      center: [0.0,0.0 ], 
+      center: [0.34219039050572064, -0.3426164100134912],       // DA BOOM, tile 1000,1000
       zoom: 18,
       interactive: true,
       
       transformRequest: (url, resourceType)=> {
-        if(resourceType === 'Tile' && url.startsWith('https://secondlife-maps-cdn.akamaized.net')) {
+        if(resourceType === 'Tile' && url.startsWith('')) {
             url = urlmath(url); // apply ADD rewriting
             return {
-                url: url.replace('https', 'https://cors-anywhere.herokuapp.com/https')////,
+                url: url /// .replace('https', 'https://cors-anywhere.herokuapp.com/https')////,
                 ////headers: { 'Origin': 'null'},
                 ////credentials: 'include'  // Include cookies for cross-origin requests
                     }

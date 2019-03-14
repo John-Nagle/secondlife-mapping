@@ -37,19 +37,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "raster-opacity": {
-          "base": 1.5,
-          "stops": [
-            [
-              0,
-              0.6
-            ],
-            [
-              6,
-              0.1
-            ]
-          ]
-        }
+        "raster-opacity": 1.0
       }
     }
   ]
