@@ -75,7 +75,8 @@
                 var slz = SLGRIDEDGESIZEPOWER + 1 - z; // mlz=20 => slz=1
                 var scale = Math.pow(2,slz-1)           // slz=1 => scale=1
                 var slx = x * scale - (SLGRIDEDGESIZEINREGIONS/2);   
-                var sly = y * scale - (SLGRIDEDGESIZEINREGIONS/2);   
+                ////var sly = y * scale - (SLGRIDEDGESIZEINREGIONS/2); 
+                var sly = (SLGRIDEDGESIZEINREGIONS/2) - y * scale;   // Reversed! Why???
                 var tileid = slz.toString() + '-' + slx.toString() + '-' + sly.toString();
                 s = s.replace(match[0], tileid);
                 console.log("Tile request: " + match[0] + " -> " + tileid + "  Center: " + map.getCenter() + " Zoom: " + map.getZoom()); // ***TEMP***
@@ -88,7 +89,7 @@
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
-      center: [0.34219039050572064, -0.3426164100134912],       // DA BOOM, tile 1000,1000
+      center: [0.34219039050572064, 0.3426164100134912],       // DA BOOM, tile 1000,1000
       zoom: 18,
       interactive: true,
       
