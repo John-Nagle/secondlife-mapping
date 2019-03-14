@@ -8,10 +8,10 @@
   "sources": {
     
     "natural_earth_shaded_relief": {
-      "maxzoom": 7,
-      "minzoom": 0,
+      "maxzoom": 20,
+      "minzoom": 13,
       "tileSize": 256,
-      "bounds": [0.0,0.0,90.0,90.0],
+      "bounds": [-180.0,-85.0,90.0,90.0],
       "tiles": [
         "https://secondlife-maps-cdn.akamaized.net/map-SLTILENUM({x},{y},{z})-objects.jpg"
       ],
@@ -32,7 +32,7 @@
       "id": "natural_earth",
       "type": "raster",
       "source": "natural_earth_shaded_relief",
-      "maxzoom": 8,
+      "maxzoom": 20,
       "layout": {
         "visibility": "visible"
       },

@@ -20,7 +20,38 @@
         //  Convert POW2(n) to 2^n
         //  Convert MULT(n,m) to n*m
         //  Convert SLTILENUM(x,y,z) to SL map tile numbers
+        //
+        //  Tile remapping algorithm
+        //
+        //  SL tile numbers are X and Y values in  the range 0..2^20
         //  Match expression always removes operation if it matches, so loop is safe.
+        //
+        //  SL map units
+        //  Per "http://wiki.secondlife.com/wiki/Map_API_Introduction"
+        const SLGRIDEDGESIZEPOWER = 20;     // Grid size in regions, exponent
+        const SLGRIDEDGESIZEINREGIONS = Math.pow(2,SLGRIDEDGESIZEPOWER);
+        const SLMINLAT = 0.0;               // corresponds to tile 0,0
+        const SLMINLNG = 0.0;
+        const SLMAXLAT = 90.0;              // corresponds to tile (2^20, 2^20)
+        const SLMAXLNG = 90.0;
+        const SLZOOMMIN = 1;                // zoomed in fully, 1 tile = 1 unit
+        const SLZOOMMAX = 8;                // zoomed out fully
+        //  Mapbox units
+        //  Per https://en.wikipedia.org/wiki/Web_Mercator_projection
+        const MBLATLIM = 85.051129;         // Cylindrical projection of a sphere.
+        const MBMINLAT = -90.0;
+        const MBMAXLAT = 90.0;
+        const MBMINLNG = -180.0;
+        const MBMAXLNG = 180.0;
+        //  In Mapbox, at zoom level 0, 1 tile fills the area to += MBLATLIM
+        //  So we want to map zoom as follows:
+        //  mlz=20 => slz=8
+        //  slz = SLGIDSIZEPOWER + 1 - mlz // mlz=20 => slz=1
+        //  scale = Math.pow(2,SLZOOMMAX-slz) // slz=8 => scale=1
+        //  slx = mlx*scale - (SLGRIDEDGESIZEINREGIONS/2)
+        //  sly = mly*scale - (SLGRIDEDGESIZEINREGIONS/2)
+        //  Range for mlz: [13..20]
+        //  Range for lat/lng: [0..90]
         var changed = false;
         var match;
         do
@@ -41,23 +72,24 @@
             {   var x = parseInt(match[1]);
                 var y = parseInt(match[2]);
                 var z = parseInt(match[3]);
-                z = 8 - z;                      // adjust to SL system where 1 is lowest rez
-                var scale = Math.pow(2,z-1);    // scale factor
-                x = x * scale;                  // SL uses the region pos as the tile number
-                y = y * scale;
-                var tileid = z.toString() + '-' + x.toString() + '-' + y.toString();
+                var slz = SLGRIDEDGESIZEPOWER + 1 - z; // mlz=20 => slz=1
+                var scale = Math.pow(2,slz-1)           // slz=1 => scale=1
+                var slx = x * scale - (SLGRIDEDGESIZEINREGIONS/2);   
+                var sly = y * scale - (SLGRIDEDGESIZEINREGIONS/2);   
+                var tileid = slz.toString() + '-' + slx.toString() + '-' + sly.toString();
                 s = s.replace(match[0], tileid);
+                console.log("Tile request: " + match[0] + " -> " + tileid + "  Center: " + map.getCenter() + " Zoom: " + map.getZoom()); // ***TEMP***
                 changed = true;
             }
         } while (changed);
-        console.log("Tile: " + s);                // ***TEMP***
+        ////console.log("Tile: " + s);                // ***TEMP**
         return s;
       }
   var map = new mapboxgl.Map({
       container: 'map',
       style: 'slflatmap/style.json',
-      center: [ -179.65667724609375, -89.82833862304688 ], // tile 1000,1000 - Da Boom
-      zoom: 5,
+      center: [0.0,0.0 ], 
+      zoom: 18,
       interactive: true,
       
       transformRequest: (url, resourceType)=> {
