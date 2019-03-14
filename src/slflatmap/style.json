@@ -7,7 +7,7 @@
   },
   "sources": {
     
-    "natural_earth_shaded_relief": {
+    "second_life_map_tiles": {
       "maxzoom": 20,
       "minzoom": 13,
       "tileSize": 256,
@@ -29,9 +29,9 @@
       }
     },
     {
-      "id": "natural_earth",
+      "id": "second_life_map",
       "type": "raster",
-      "source": "natural_earth_shaded_relief",
+      "source": "second_life_map_tiles",
       "maxzoom": 20,
       "layout": {
         "visibility": "visible"

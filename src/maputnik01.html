@@ -15,13 +15,7 @@
   <div id='map'></div>
   <script>
       function urlmath(s)
-      { //  Our own little domain-specific language for rewriting tile numbers in URLs.
-        //  Convert ADD(n,m) in string to sum of n and m.
-        //  Convert POW2(n) to 2^n
-        //  Convert MULT(n,m) to n*m
-        //  Convert SLTILENUM(x,y,z) to SL map tile numbers
-        //
-        //  Tile remapping algorithm
+      { //  Tile remapping algorithm
         //
         //  SL tile numbers are X and Y values in  the range 0..2^20
         //  Match expression always removes operation if it matches, so loop is safe.
@@ -37,8 +31,8 @@
         const SLZOOMMIN = 1;                // zoomed in fully, 1 tile = 1 unit
         const SLZOOMMAX = 8;                // zoomed out fully
         //  Mapbox units
-        //  Per https://en.wikipedia.org/wiki/Web_Mercator_projection
-        const MBLATLIM = 85.051129;         // Cylindrical projection of a sphere.
+        //  Per "https://en.wikipedia.org/wiki/Web_Mercator_projection"
+        const MBLATLIM = 85.051129;         // Cylindrical projection of a sphere limited before Y goes infinite.
         const MBMINLAT = -90.0;
         const MBMAXLAT = 90.0;
         const MBMINLNG = -180.0;
@@ -56,18 +50,6 @@
         var match;
         do
         {   changed = false;       
-            if (match = /ADD\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
-            {   s = s.replace(match[0], parseInt(match[1]) + parseInt(match[2]));
-                changed = true;
-            }
-            if (match = /MULT\(([0-9\-]+),([0-9\-]+)\)/.exec(s))
-            {   s = s.replace(match[0], parseInt(match[1]) * parseInt(match[2]));
-                changed = true;
-            }
-            if (match = /POW2\(([0-9\-]+)\)/.exec(s))
-            {   s = s.replace(match[0], Math.pow(2,parseInt(match[1])));
-                changed = true;       
-            }
             if (match = /SLTILENUM\(([0-9]+),([0-9]+),([0-9]+)\)/.exec(s))
             {   var x = parseInt(match[1]);
                 var y = parseInt(match[2]);
