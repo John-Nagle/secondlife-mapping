@@ -75,6 +75,7 @@
       zoom: 18,
       maxZoom: 19.95,                                           // As far as we can go.
       minZoom: 11.50,
+      maxBounds: [0.0, 0.0, 1.0, 1.0],                          // lat/long limits of the SL world, with some allowance for expansion.
       interactive: true,
       
       transformRequest: (url, resourceType)=> {
