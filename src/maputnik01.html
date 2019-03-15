@@ -8,8 +8,8 @@
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
   <div id='map'></div>
@@ -38,12 +38,15 @@
         const MBMINLNG = -180.0;
         const MBMAXLNG = 180.0;
         //  In Mapbox, at zoom level 0, 1 tile fills the area to += MBLATLIM
+        //  X goes from 0 (left edge is 180 °W) to 2^zoom − 1 (right edge is 180 °E)
+        //  Y goes from 0 (top edge is 85.0511 °N) to 2^zoom − 1 (bottom edge is 85.0511 °S) in a Mercator projection
+        //  Ref: https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#X_and_Y
         //  So we want to map zoom as follows:
         //  mlz=20 => slz=8
         //  slz = SLGIDSIZEPOWER + 1 - mlz // mlz=20 => slz=1
         //  scale = Math.pow(2,SLZOOMMAX-slz) // slz=8 => scale=1
         //  slx = mlx*scale - (SLGRIDEDGESIZEINREGIONS/2)
-        //  sly = mly*scale - (SLGRIDEDGESIZEINREGIONS/2)
+        //  sly = (SLGRIDEDGESIZEINREGIONS/2) - mly*scale   because Mapbox Y axis from the top edge down
         //  Range for mlz: [13..20]
         //  Range for lat/lng: [0..90]
         var changed = false;
@@ -57,8 +60,7 @@
                 var slz = SLGRIDEDGESIZEPOWER + 1 - z; // mlz=20 => slz=1
                 var scale = Math.pow(2,slz-1)           // slz=1 => scale=1
                 var slx = x * scale - (SLGRIDEDGESIZEINREGIONS/2);   
-                ////var sly = y * scale - (SLGRIDEDGESIZEINREGIONS/2); 
-                var sly = (SLGRIDEDGESIZEINREGIONS/2) - y * scale;   // Reversed! Why???
+                var sly = (SLGRIDEDGESIZEINREGIONS/2) - y * scale;   // Reversed! See above.
                 var tileid = slz.toString() + '-' + slx.toString() + '-' + sly.toString();
                 s = s.replace(match[0], tileid);
                 console.log("Tile request: " + match[0] + " -> " + tileid + "  Center: " + map.getCenter() + " Zoom: " + map.getZoom()); // ***TEMP***
@@ -73,7 +75,7 @@
       style: 'slflatmap/style.json',
       center: [0.34219039050572064, 0.3426164100134912],       // DA BOOM, tile 1000,1000
       zoom: 18,
-      maxZoom: 19.95,                                           // As far as we can go.
+      maxZoom: 19.45,                                           // As far as we can go.
       minZoom: 11.50,
       maxBounds: [0.0, 0.0, 1.0, 1.0],                          // lat/long limits of the SL world, with some allowance for expansion.
       interactive: true,
