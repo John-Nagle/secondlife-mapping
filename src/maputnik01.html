@@ -66,7 +66,7 @@
                 var slz = SLGRIDEDGESIZEPOWER + 1 - z; // mlz=20 => slz=1
                 var scale = Math.pow(2,slz-1)           // slz=1 => scale=1
                 var slx = x * scale - (SLGRIDEDGESIZEINREGIONS/2);   
-                var sly = (SLGRIDEDGESIZEINREGIONS/2) - y * scale;   // Reversed! See above.
+                var sly = (SLGRIDEDGESIZEINREGIONS/2) - (y+1) * scale;   // Reversed! See above.  (y+1) makes it work, but why?
                 var tileid = slz.toString() + '-' + slx.toString() + '-' + sly.toString();
                 s = s.replace(match[0], tileid);
                 console.log("Tile request: " + match[0] + " -> " + tileid + "  Center: " + map.getCenter() + " Zoom: " + map.getZoom()); // ***TEMP***
