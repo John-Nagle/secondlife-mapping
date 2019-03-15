@@ -20,6 +20,12 @@
         //  SL tile numbers are X and Y values in  the range 0..2^20
         //  Match expression always removes operation if it matches, so loop is safe.
         //
+        //  The style file, in JSON, in its "tiles" URL field, should have an expression like
+        //  
+        //  SLTILENUM({x},{y},{z})
+        //
+        //  Mapbox will fill in {x},{y},{z}. This code will rewrite SLTILENUM forms into SL tile numbers.
+        //
         //  SL map units
         //  Per "http://wiki.secondlife.com/wiki/Map_API_Introduction"
         const SLGRIDEDGESIZEPOWER = 20;     // Grid size in regions, exponent
