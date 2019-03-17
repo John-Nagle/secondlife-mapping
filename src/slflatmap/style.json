@@ -16,7 +16,14 @@
         "https://secondlife-maps-cdn.akamaized.net/map-SLTILENUM({x},{y},{z})-objects.jpg"
       ],
       "type": "raster"
-    }
+    },
+      "second_life_elevation" : {
+        "type": "raster-dem",
+        "tiles": ["testdata/elev-SLTILENUM({x},{y},{z}).png"],
+        "tileSize": 256,
+        "maxzoom": 20,
+        "minzoom": 12
+      }
   },
   "sprite": "https://maputnik.github.io/osm-liberty/sprites/osm-liberty",
   "glyphs": "https://maps.tilehosting.com/fonts/{fontstack}/{range}.pbf?key={key}",
@@ -38,6 +45,14 @@
       },
       "paint": {
         "raster-opacity": 1.0
+      }
+    },
+    {
+      "id": "second_life_hill_shading",
+      "type": "hillshade",
+      "source": "second_life_elevation",
+      "paint": {
+        "hillshade-exaggeration": 0.25
       }
     }
   ]
