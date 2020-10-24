@@ -38,26 +38,6 @@ class TerrainSculpt:
         self.zoffset = None             # Smallest Z value 
         self.waterheight = None;        # Z < this is underwater.
 
-    def setelevations(self, elevs, scale, offset, waterlevel) :
-        """
-        Read elevations and preprocess.
-        
-        Data is 65x65 array, and we take the minimum of adjacent points to 
-        get it down to 64x64. This is so if we put a sculpt under real
-        terrain, it's always below it. Also, if below the water level,
-        value is set to 0.
-        
-        Must be square.
-        """
-        self.elevs = numpy.zeros((TerrainSculpt.SCULPTDIM, TerrainSculpt.SCULPTDIM))    # elevations array
-        for row in elevs :
-            rowvals = []
-            for i in range(len(row)-1) :
-                vals += (((row[i] + row[i+1])/2.0) * scale + offset)    # averaged values across row
-            # ***MORE***
-            
-        pass
-
     def makeimage(self) :
         """
         Process elevation info into integer form
@@ -81,7 +61,10 @@ class TerrainSculpt:
                 ####print("z=",zscaled, zpixel)
                 xpixel = int((x*256) / self.elevs.shape[0])
                 ypixel = int((y*256) / self.elevs.shape[1])
-                pix[x,y] = (xpixel, ypixel, zpixel)             # into 0..255 range
+                #   Elevs is ordered with +Y as north, but sculpt images have to be flipped in Y
+                #   to get the UVs right and the sculpt not inside out.
+                ####pix[x,self.elevs.shape[1]-y-1] = (xpixel, 255-ypixel, zpixel)             # into 0..255 range
+                pix[x,self.elevs.shape[1]-y-1] = (xpixel, ypixel, zpixel)             # into 0..255 range
         self.image = img
         
     def setelevs(self, elevs, inputscale, inputoffset) :
@@ -134,7 +117,7 @@ def unpackelev(elev) :
     """
     Unpack elevation data stored as 2-character hex
     """
-    print("elev: %s length: %d" % (elev, len(elev)))
+    ####print("elev: %s length: %d" % (elev, len(elev)))
     return [int(elev[n*2:n*2+2],16) for n in range(int(len(elev)/2))]
                 
 
@@ -146,7 +129,7 @@ def handlefile(filename, outprefix) :
         s = infile.read()               # read entire file
         pos = s.find("\n{")             # find beginning of JSON
         if (pos < 1) :
-            raise RuntimeError("Unable to find JSON data in \"%s\"" % (filename))
+            raise RuntimeError("Unable to find JSON data in file \"%s\"" % (filename))
         s = s[pos-1:-1]                 # trim off beginning of email
         ####print(s)                        # ***TEMP***
         jsn = json.loads(s)             # parse into JSON.
