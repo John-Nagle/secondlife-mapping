@@ -96,7 +96,7 @@ class TerrainSculpt:
                 z2 = elevs[math.ceil(xfract), math.floor(yfract)]
                 z3 = elevs[math.ceil(xfract), math.ceil(yfract)]   
                 z = min(z0,z1,z2,z3)
-                newelevs[x,y] = z * inputscale + inputoffset    # interpolated scaled value        
+                newelevs[x,y] = z * (inputscale/256.0) + inputoffset    # interpolated scaled value        
         self.elevs = newelevs                                   # matrix of actual altitudes
                 
     def pyramidtest(self) :
